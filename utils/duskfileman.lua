@@ -16,6 +16,7 @@ behavior.clrOnExit = true
 --
 -- Used down in the while true loop.
 
+local txm,tym = term.getSize()
 local dfmVer = 1.0
 
 local function e(s)
@@ -34,7 +35,7 @@ local function topLine(string)
 end
 
 local function displayCustomMessage(text) -- Display a custom message at 1,19 in orange.
-    local txm, tym = term.getSize()
+    txm, tym = term.getSize()
 
     term.setCursorPos(1,tym)
 
@@ -87,7 +88,8 @@ else
             end
         end
 
-        term.setCursorPos(1,18)
+        txm, tym = term.getSize()
+        term.setCursorPos(1,tym-1)
         write("} ")
         -- TODO: Autocomplete. -Dusk, 3/15/2024
         local input = read()
@@ -117,9 +119,13 @@ else
             end
         else
             if behavior.onFileEntered == "edit" then
-                print(shell.dir().."/"..input)
-                shell.run("edit /"..shell.dir().."/"..input)
-                displayCustomMessage("File viewed or modified.")
+                if fs.exists(shell.dir().."/"..input) then
+                    print(shell.dir().."/"..input)
+                    shell.run("edit /"..shell.dir().."/"..input)
+                    displayCustomMessage("File viewed or modified.")
+                else
+                    displayCustomMessage("No such file or command.")
+                end
             else
                 shell.run("/"..shell.dir().."/"..input)
                 displayCustomMessage("Ran file that was selected.")
