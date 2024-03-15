@@ -6,3 +6,4 @@ Utilities:
 
 - ``touch`` - Create files at a given location.
 - ``cat`` - Concatenate (display) file contents to the standard output.
+- ``duskfileman`` - Simple file manager/browser.
