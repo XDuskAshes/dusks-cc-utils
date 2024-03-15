@@ -8,7 +8,7 @@ local args = {...}
 
 local behavior = {}
 behavior.onFileEntered = "edit"
-behavior.clrOnExit = false
+behavior.clrOnExit = true
 
 -- The above has two values possible.
 -- 'edit' - Opens the file in 'edit'.
@@ -95,7 +95,7 @@ else
         if fs.exists(shell.dir().."/"..input) and fs.isDir(shell.dir().."/"..input) then
             shell.setDir(shell.dir().."/"..input)
         elseif input == "exit" then
-            if clrOnExit then
+            if behavior.clrOnExit == true then
                 term.clear()
                 term.setCursorPos(1,1)
             end
