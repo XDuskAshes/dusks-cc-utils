@@ -1,6 +1,6 @@
-# Dusk's ComputerCraft Utilities
+# General ComputerCraft Utilities
 
-A collection of useful programs I've developed steadily over some time and am deciding to share.
+A collection of useful programs that have been developed steadily over some time and am deciding to share.
 
 Utilities:
 
