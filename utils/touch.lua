@@ -1,7 +1,7 @@
 -- Name: touch
 -- Author: XDuskAshes - <https://github.com/XDuskAshes>
 -- Description: Create files at a given location.
--- Part of: Dusk's ComputerCraft Utilities - <https://github.com/XDuskAshes/dusks-cc-utils/>
+-- Part of: General ComputerCraft Utilities - <https://github.com/XDuskAshes/general-cc-utils/>
 -- License: MIT License - <https://opensource.org/license/MIT>
 
 local args = {...}

@@ -1,7 +1,7 @@
 -- Name: duskfileman
 -- Author: XDuskAshes - <https://github.com/XDuskAshes>
 -- Description: Simple file manager/browser.
--- Part of: Dusk's ComputerCraft Utilities - <https://github.com/XDuskAshes/dusks-cc-utils/>
+-- Part of: General ComputerCraft Utilities - <https://github.com/XDuskAshes/general-cc-utils/>
 -- License: MIT License - <https://opensource.org/license/MIT>
 
 local args = {...}
