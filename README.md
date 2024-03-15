@@ -11,3 +11,12 @@ Utilities:
 ### Info on releases
 
 Every ten new utilities, I will make a new release.
+
+### Contributing
+
+To contribute:
+
+1. **Fork** this repository.
+2. Make your changes.
+ - The reccomended way to do this is locally cloning the repository into your local ComputerCraft environment and editing from there. After that, commit and push.
+3. Make a pull request. Review may take a while.
