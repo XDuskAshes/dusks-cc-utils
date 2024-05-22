@@ -7,11 +7,11 @@
 local args = {...}
 
 if args[1] == "help" or #args < 1 then
-    
+
     if #args < 1 then
         printError("Cannot accept no args, showing help.")
     end
-    
+
     print("touch - create files at the given paths.")
     print("help - Display this help.")
     print("Usage:\n touch <file> <file> <file> <etc>...")
@@ -22,7 +22,6 @@ else
             printError("Already exists, skipping: "..v)
         else
             local handle = fs.open(v,'w')
-            handle.writeLine('')
             handle.close()
         end
     end

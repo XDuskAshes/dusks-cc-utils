@@ -6,24 +6,22 @@
 
 local args = {...}
 
-local behavior = {}
-behavior.onFileEntered = "edit"
-behavior.clrOnExit = true
+local raw = fs.open("/dfm.json","r")
 
--- The above has two values possible.
--- 'edit' - Opens the file in 'edit'.
--- 'run' - Runs the program then and there.
---
--- Used down in the while true loop.
-
-local txm,tym = term.getSize()
-local dfmVer = 1.0
-
-local function e(s)
-    return #s < 1
+if not raw then
+    error("Cannot find JSON config file. (/dfm.json)",0)
 end
 
-local function topLine(string)    
+local behavior = textutils.unserialiseJSON(raw.readAll())
+
+local txm,tym = term.getSize()
+local dfmVer = 1.1
+
+local function e(s)
+    return s == nil or s == "" or #s < 1
+end
+
+local function topLine(string)
     write(string.."\n")
 
     -- Should create a line that's only as long as the given string.
@@ -47,15 +45,27 @@ local function displayCustomMessage(text) -- Display a custom message at 1,19 in
         term.setTextColor(colors.orange)
         write(text)
     end
-    
+
     term.setTextColor(colors.white)
     sleep(0.5)
     term.clearLine()
 end
 
+local function pause()
+    print("\nPress any button to continue browsing...")
+    while true do
+        local event = {os.pullEvent()}
+        local eventD = event[1]
+
+        if eventD == "key" then
+            break
+        end
+    end
+end
+
 if args[1] == "--help" or args[1] == "-h" then
     print("duskfileman - Simple file explorer/manager\n")
-    print("usage:\n duskfileman <dir>\n The <dir> arg is needed, or else the program won't run.\n\nFor how to use, run 'duskfileman --howto'")
+    print("usage:\n duskfileman <dir>\nDefault directory is the current one.\n\nFor how to use, run 'duskfileman --howto'")
 elseif args[1] == "--howto" then
     print("duskfileman - How to use")
     print("Navigation:\n } <dir>\nExiting:\n } exit")
@@ -63,6 +73,8 @@ else
 
     if not e(args[1]) then
         shell.setDir(args[1])
+    else
+        shell.setDir(shell.dir())
     end
 
     while true do
@@ -71,6 +83,8 @@ else
         term.setCursorPos(1,1)
 
         local toFuzz = fs.list(shell.dir())
+        local dirs = {}
+        local files = {}
 
         if e(shell.dir()) then
             topLine("/")
@@ -78,13 +92,35 @@ else
             topLine("/"..shell.dir().."/")
         end
 
-        for k,v in pairs(toFuzz) do
-            if fs.isDir(shell.dir().."/"..v) then
+        if behavior.seperateDirs == true then
+            for k,v in pairs(toFuzz) do
+                if fs.isDir(shell.dir().."/"..v) then
+                    table.insert(dirs,v)
+                else
+                    table.insert(files,v)
+                end
+            end
+
+            for k,v in pairs(dirs) do
                 term.setTextColor(colors.green)
                 write(v.."/ ")
                 term.setTextColor(colors.white)
-            else
+            end
+
+            print("")
+
+            for k,v in pairs(files) do
                 write(v.." ")
+            end
+        else
+            for k,v in pairs(toFuzz) do
+                if fs.isDir(shell.dir().."/"..v) then
+                    term.setTextColor(colors.green)
+                    write(v.."/ ")
+                    term.setTextColor(colors.white)
+                else
+                    write(v.." ")
+                end
             end
         end
 
@@ -106,22 +142,27 @@ else
             term.clear()
             term.setCursorPos(1,1)
             print("DuskFileManager v"..dfmVer)
-            print("Author: Dusk\n\nPress any button to keep browsing...")
-            
+            print("Author: Dusk")
+
             -- I theorize this will break something someday. -Dusk, 3/15/2024
-            while true do
-                local event = {os.pullEvent()}
-                local eventD = event[1]
-        
-                if eventD == "key" then
-                    break
-                end
-            end
+            -- Nothing yet. -Dusk, 5/21/2024
+            pause()
+        elseif input == "help" then
+            term.clear()
+            term.setCursorPos(1,1)
+            print("DuskFileManager v"..dfmVer.." help")
+            print("\nDirectories are in GREEN, files are in WHITE.")
+            print("To navigate to a directory, type it's name and/or path.")
+            print("To perform file actions, type the file's full path and name, including file handles.")
+            print("\nTo exit, type 'exit'.")
+            print("For program info, type 'info'.")
+            print("To view this help, type 'help'.")
+            pause()
         else
-            if behavior.onFileEntered == "edit" then
+            if behavior.editOnFileEntered == true then
                 if fs.exists(shell.dir().."/"..input) then
                     print(shell.dir().."/"..input)
-                    shell.run("edit /"..shell.dir().."/"..input)
+                    shell.run(behavior.editProgram.." /"..shell.dir().."/"..input)
                     displayCustomMessage("File viewed or modified.")
                 else
                     displayCustomMessage("No such file or command.")
@@ -132,5 +173,4 @@ else
             end
         end
     end
-    
 end
