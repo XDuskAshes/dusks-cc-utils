@@ -74,7 +74,7 @@ Short for "Clear On Exit", ``clrOnExit`` is a ``true`` or ``false`` value that d
 Tells DuskFileManager the path to the text editor of choice. goes hand-in-hand with ``editOnFileEntered``.
 
 ### ``editOnFileEntered``
-Quite a mouthful, but therefore self-explanatory. A ``true`` or ``false`` value that tells DuskFileManager if it should open the ``editProgram`` or if it should run it.
+Quite a mouthful, but therefore self-explanatory. A ``true`` or ``false`` value that tells DuskFileManager if, when given a file, it should open it in the ``editProgram`` or if it should run it.
 
 ### ``seperateDirs``
 Short for "Seperate Directories in Listing", ``seperateDirs`` is a ``true`` or ``false`` value that tells DuskFileManager one of two things.
